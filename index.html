@@ -50,30 +50,39 @@
       let leftIndex = 0;
       let rightIndex = 0;
 
-      while (leftIndex < left.length && rightIndex < right.length) {
-        if (left[leftIndex] < right[rightIndex]) {
-          result.push(left[leftIndex]);
-          leftIndex++;
-        } else {
-          result.push(right[rightIndex]);
-          rightIndex++;
-        }
+      function mergeStep() {
+        if (leftIndex < left.length && rightIndex < right.length) {
+          if (left[leftIndex] < right[rightIndex]) {
+            result.push(left[leftIndex]);
+            leftIndex++;
+          } else {
+            result.push(right[rightIndex]);
+            rightIndex++;
+          }
 
-        // Visualization step: Draw the current state
-        drawNumbers(result.concat(left.slice(leftIndex)), 'black');
+          // Visualization step: Draw the current state
+          drawNumbers(result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex)), 'black');
+
+          // Recursive call with a delay
+          setTimeout(mergeStep, 1000); // Adjust the delay time (in milliseconds) as needed
+        } else {
+          // Merge remaining elements
+          result = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+
+          // Visualization step: Draw the final sorted state
+          drawNumbers(result, 'green');
+        }
       }
 
-      return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+      mergeStep();
+      return result;
     }
 
     // Visualization step: Draw the initial state
     drawNumbers(numbers, 'black');
 
     // Start the mergesort algorithm
-    const sortedNumbers = mergeSort(numbers);
-
-    // Visualization step: Draw the final sorted state
-    drawNumbers(sortedNumbers, 'green');
+    mergeSort(numbers);
   </script>
 </body>
 </html>
