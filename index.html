@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Numbers on Canvas</title>
+</head>
+<body>
+  <canvas id="randomNumbersCanvas" width="400" height="50"></canvas>
+
+  <script>
+    // Get the canvas element and its 2d context
+    const canvas = document.getElementById('randomNumbersCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Function to generate a random integer between min and max (inclusive)
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // Generate 8 random numbers between 1 and 9
+    const randomNumbers = Array.from({ length: 8 }, () => getRandomInt(1, 9));
+
+    // Draw the random numbers on the canvas in a line
+    const lineHeight = 30;
+    const startX = 10;
+
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+
+    randomNumbers.forEach((number, index) => {
+      const x = startX + index * 40;
+      const y = lineHeight;
+      ctx.fillText(number, x, y);
+    });
+  </script>
+</body>
+</html>
