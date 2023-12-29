@@ -3,36 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Numbers on Canvas</title>
+  <title>Mergesort Visualization</title>
 </head>
 <body>
-  <canvas id="randomNumbersCanvas" width="400" height="50"></canvas>
+  <canvas id="mergeSortCanvas" width="400" height="50"></canvas>
 
   <script>
-    // Get the canvas element and its 2d context
-    const canvas = document.getElementById('randomNumbersCanvas');
+    const canvas = document.getElementById('mergeSortCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Function to generate a random integer between min and max (inclusive)
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    // Generate 8 random numbers between 1 and 9
-    const randomNumbers = Array.from({ length: 8 }, () => getRandomInt(1, 9));
+    const numbers = Array.from({ length: 8 }, () => getRandomInt(1, 9));
 
-    // Draw the random numbers on the canvas in a line
     const lineHeight = 30;
     const startX = 10;
 
-    ctx.font = '20px Arial';
-    ctx.fillStyle = 'black';
+    function drawNumbers(arr, color) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = '20px Arial';
+      ctx.fillStyle = color;
 
-    randomNumbers.forEach((number, index) => {
-      const x = startX + index * 40;
-      const y = lineHeight;
-      ctx.fillText(number, x, y);
-    });
+      arr.forEach((number, index) => {
+        const x = startX + index * 40;
+        const y = lineHeight;
+        ctx.fillText(number, x, y);
+      });
+    }
+
+    function mergeSort(arr) {
+      if (arr.length <= 1) {
+        return arr;
+      }
+
+      const middle = Math.floor(arr.length / 2);
+      const left = arr.slice(0, middle);
+      const right = arr.slice(middle);
+
+      return merge(mergeSort(left), mergeSort(right));
+    }
+
+    function merge(left, right) {
+      let result = [];
+      let leftIndex = 0;
+      let rightIndex = 0;
+
+      while (leftIndex < left.length && rightIndex < right.length) {
+        if (left[leftIndex] < right[rightIndex]) {
+          result.push(left[leftIndex]);
+          leftIndex++;
+        } else {
+          result.push(right[rightIndex]);
+          rightIndex++;
+        }
+
+        // Visualization step: Draw the current state
+        drawNumbers(result.concat(left.slice(leftIndex)), 'black');
+      }
+
+      return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
+    }
+
+    // Visualization step: Draw the initial state
+    drawNumbers(numbers, 'black');
+
+    // Start the mergesort algorithm
+    const sortedNumbers = mergeSort(numbers);
+
+    // Visualization step: Draw the final sorted state
+    drawNumbers(sortedNumbers, 'green');
   </script>
 </body>
 </html>
