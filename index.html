@@ -30,7 +30,7 @@
 
     function mergeSort(arr) {
       if (arr.length <= 1) {
-        return arr;
+        return [arr];
       }
 
       const middle = Math.floor(arr.length / 2);
@@ -44,40 +44,42 @@
       let result = [];
       let leftIndex = 0;
       let rightIndex = 0;
+      let states = [];
 
-      function mergeStep() {
-        if (leftIndex < left.length && rightIndex < right.length) {
-          if (left[leftIndex] < right[rightIndex]) {
-            result.push(left[leftIndex]);
-            leftIndex++;
-          } else {
-            result.push(right[rightIndex]);
-            rightIndex++;
-          }
-
-          // Visualization step: Draw the current state
-          drawNumbers(result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex)), 'red');
-
-          // Recursive call with a delay
-          setTimeout(mergeStep, 1000); // Adjust the delay time (in milliseconds) as needed
+      while (leftIndex < left[0].length && rightIndex < right[0].length) {
+        if (left[0][leftIndex] < right[0][rightIndex]) {
+          result.push(left[0][leftIndex]);
+          leftIndex++;
         } else {
-          // Merge remaining elements
-          result = result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-
-          // Visualization step: Draw the final sorted state
-          drawNumbers(result, 'green');
+          result.push(right[0][rightIndex]);
+          rightIndex++;
         }
+
+        // Store the current state
+        states.push(result.slice().concat(left[0].slice(leftIndex)).concat(right[0].slice(rightIndex)));
       }
 
-      mergeStep();
-      return result;
+      // Merge remaining elements
+      result = result.concat(left[0].slice(leftIndex)).concat(right[0].slice(rightIndex));
+      states.push(result);
+
+      // Visualization step: Draw each state with a delay
+      states.forEach((state, index) => {
+        setTimeout(() => {
+          drawNumbers(state, index === states.length - 1 ? 'green' : 'red');
+        }, index * 1000); // Adjust the delay time (in milliseconds) as needed
+      });
+
+      return [result];
     }
 
     // Visualization step: Draw the initial state
     drawNumbers(numbers, 'black');
 
     // Start the mergesort algorithm
-   setTimeout( function(){ mergeSort(numbers) },1200);
+    setTimeout(() => {
+      mergeSort(numbers);
+    }, 1200);
   </script>
 </body>
 </html>
